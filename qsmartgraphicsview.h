@@ -4,8 +4,8 @@
 // Protected under LPGLv3 license.
 //M*/
 
-#ifndef SMARTGRAPHICSVIEW_H
-#define SMARTGRAPHICSVIEW_H
+#ifndef QSMARTGRAPHICSVIEW_H
+#define QSMARTGRAPHICSVIEW_H
 
 #include <QFileInfo>
 #include <QGraphicsItem>
@@ -17,17 +17,21 @@
 #include <QVector>
 
 #include <vector>
+#ifdef HAVE_OPENCV
 #include "opencv2/opencv.hpp"
+#endif
 
-class smartGraphicsView : public QGraphicsView
+class qSmartGraphicsView : public QGraphicsView
 {
     Q_OBJECT
 public:
-    explicit smartGraphicsView(QWidget *parent = 0);
-    ~smartGraphicsView();
+    explicit qSmartGraphicsView(QWidget *parent = 0);
+    ~qSmartGraphicsView();
     void initialize(const int _img_num, const int width, const int height, int changeRow = 4);
+#ifdef HAVE_OPENCV
     void setImage(const cv::Mat &img);
     void setImage(const std::vector<cv::Mat> &imgs);
+#endif
     void setImagefromQImage(const QImage &qimg);
     void setImagefromQImage(const std::vector<QImage> &qimgs);
     int getImgNum(){return img_num;}
@@ -55,4 +59,4 @@ private:
 };
 
 
-#endif // SMARTGRAPHICSVIEW_H
+#endif // QSMARTGRAPHICSVIEW_H

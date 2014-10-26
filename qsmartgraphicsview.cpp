@@ -1,4 +1,4 @@
-#include "smartgraphicsview.h"
+#include "qsmartgraphicsview.h"
 #include <QStyleOptionGraphicsItem>
 #include <QMenu>
 #include <QPixmap>
@@ -10,11 +10,11 @@
 #include <QReadWriteLock>
 extern QReadWriteLock lock;
 
-smartGraphicsView::smartGraphicsView(QWidget *parent) :
+qSmartGraphicsView::qSmartGraphicsView(QWidget *parent) :
     QGraphicsView(parent)
 {
 	this->setTransformationAnchor(QGraphicsView::NoAnchor);
-    this->setMouseTracking(true);    
+    this->setMouseTracking(true);
     saveAction = new QAction("Save Image", this);
     connect(saveAction, SIGNAL(triggered()), this, SLOT(on_saveAction_triggered()));
     img_num = 0;
@@ -22,13 +22,13 @@ smartGraphicsView::smartGraphicsView(QWidget *parent) :
     this->setScene(scene);
 }
 
-smartGraphicsView::~smartGraphicsView()
+qSmartGraphicsView::~qSmartGraphicsView()
 {
     scene->clear();
     delete scene;
 }
 
-void smartGraphicsView::initialize(const int _img_num, const int width, const int height, int changeRow)
+void qSmartGraphicsView::initialize(const int _img_num, const int width, const int height, int changeRow)
 {
     const int CHANGE = changeRow > _img_num ? (_img_num / 2) : changeRow;
     img_num = _img_num;
@@ -55,7 +55,8 @@ void smartGraphicsView::initialize(const int _img_num, const int width, const in
     this->fitInView(0, 0, width*img_num, height, Qt::KeepAspectRatio);
 }
 
-void smartGraphicsView::setImage(const cv::Mat &img)
+#ifdef HAVE_OPENCV
+void qSmartGraphicsView::setImage(const cv::Mat &img)
 {
     QImage img_temp(img.cols, img.rows, QImage::Format_RGB888);
     lock.lockForRead();
@@ -66,7 +67,7 @@ void smartGraphicsView::setImage(const cv::Mat &img)
     pix_item_vec[0]->setPixmap(QPixmap::fromImage(img_temp.rgbSwapped()));
 }
 
-void smartGraphicsView::setImage(const std::vector<cv::Mat> &imgs)
+void qSmartGraphicsView::setImage(const std::vector<cv::Mat> &imgs)
 {
     lock.lockForRead();
     for(size_t i = 0; i < imgs.size(); ++i){
@@ -82,23 +83,24 @@ void smartGraphicsView::setImage(const std::vector<cv::Mat> &imgs)
         item_list.at(i)->update();
     }
 }
+#endif
 
-void smartGraphicsView::setImagefromQImage(const QImage &qimg)
+void qSmartGraphicsView::setImagefromQImage(const QImage &qimg)
 {
     pix_item_vec[0]->setPixmap(QPixmap::fromImage(qimg));
 }
 
-void smartGraphicsView::updateImg()
+void qSmartGraphicsView::updateImg()
 {
     QList<QGraphicsItem *> item_list = this->items(this->rect());
     for(int i = 0; i < item_list.size(); ++i){
         QGraphicsPixmapItem *item = dynamic_cast<QGraphicsPixmapItem*>(item_list[i]);
         if(item)
-            item->update();        
+            item->update();
     }
 }
 
-void smartGraphicsView::setImagefromQImage(const std::vector<QImage> &qimgs)
+void qSmartGraphicsView::setImagefromQImage(const std::vector<QImage> &qimgs)
 {
     lock.lockForRead();
     for(size_t i = 0; i < qimgs.size(); ++i)
@@ -110,7 +112,7 @@ void smartGraphicsView::setImagefromQImage(const std::vector<QImage> &qimgs)
     }
 }
 
-void smartGraphicsView::wheelEvent(QWheelEvent *event)
+void qSmartGraphicsView::wheelEvent(QWheelEvent *event)
 {
 	if(event->delta() == 0)
 		return;
@@ -130,7 +132,7 @@ void smartGraphicsView::wheelEvent(QWheelEvent *event)
 	this->centerOn(pt);
 }
 
-void smartGraphicsView::mouseMoveEvent(QMouseEvent *event)
+void qSmartGraphicsView::mouseMoveEvent(QMouseEvent *event)
 {
 	if(event->buttons() == Qt::LeftButton){
 		this->translate(( -mou_x + event->x())/1.0, ( -mou_y + event->y())/1.0);
@@ -143,10 +145,10 @@ void smartGraphicsView::mouseMoveEvent(QMouseEvent *event)
 
 }
 
-void smartGraphicsView::mousePressEvent(QMouseEvent *event)
+void qSmartGraphicsView::mousePressEvent(QMouseEvent *event)
 {
     mou_x = event->x();
-	mou_y = event->y();    
+	mou_y = event->y();
 	if(event->button() == Qt::LeftButton)
 		this->setCursor(Qt::ClosedHandCursor);
     else if(event->button() == Qt::MidButton)
@@ -154,7 +156,7 @@ void smartGraphicsView::mousePressEvent(QMouseEvent *event)
     emit sendMousePress();
 }
 
-void smartGraphicsView::mouseDoubleClickEvent(QMouseEvent *event)
+void qSmartGraphicsView::mouseDoubleClickEvent(QMouseEvent *event)
 {
     QGraphicsPixmapItem *item = dynamic_cast<QGraphicsPixmapItem *>(this->itemAt(event->pos()));
     if(!item)
@@ -165,7 +167,7 @@ void smartGraphicsView::mouseDoubleClickEvent(QMouseEvent *event)
         emit sendItemMouXY(local_pt.x(), local_pt.y());
 }
 
-void smartGraphicsView::mouseReleaseEvent(QMouseEvent *event)
+void qSmartGraphicsView::mouseReleaseEvent(QMouseEvent *event)
 {
     this->setCursor(Qt::ArrowCursor);
     if(event->button() == Qt::RightButton){
@@ -175,7 +177,7 @@ void smartGraphicsView::mouseReleaseEvent(QMouseEvent *event)
     }
 }
 
-void smartGraphicsView::on_saveAction_triggered()
+void qSmartGraphicsView::on_saveAction_triggered()
 {
     bool isError = false;
     if(img_num == 0) {return;}

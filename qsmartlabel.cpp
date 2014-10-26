@@ -1,16 +1,16 @@
-#include "smartlabel.h"
+#include "qsmartlabel.h"
 #include <QMouseEvent>
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QMenu>
-smartLabel::smartLabel(QWidget *parent) :
+qSmartLabel::qSmartLabel(QWidget *parent) :
     QLabel(parent)
 {
     saveAction = new QAction("Save Image", this);
     connect(saveAction, SIGNAL(triggered()), this, SLOT(on_saveAction_triggered()));
 }
 
-void smartLabel::mousePressEvent(QMouseEvent *ev)
+void qSmartLabel::mousePressEvent(QMouseEvent *ev)
 {
     if(ev->button() == Qt::LeftButton){
         double c_x = this->width()/2;
@@ -25,7 +25,7 @@ void smartLabel::mousePressEvent(QMouseEvent *ev)
     }
 }
 
-void smartLabel::mouseReleaseEvent(QMouseEvent *ev)
+void qSmartLabel::mouseReleaseEvent(QMouseEvent *ev)
 {
     if(ev->button() == Qt::RightButton){
         QMenu m(this);
@@ -34,7 +34,7 @@ void smartLabel::mouseReleaseEvent(QMouseEvent *ev)
     }
 }
 
-void smartLabel::on_saveAction_triggered()
+void qSmartLabel::on_saveAction_triggered()
 {
     const QImage _img = this->pixmap()->toImage();
     QFileInfo file_name(QFileDialog::getSaveFileName(0, "Img",0,"PNG (*.png);;BMP (*.bmp);;JPG (*.jpg)"));
@@ -47,5 +47,3 @@ void smartLabel::on_saveAction_triggered()
     }
     else{QMessageBox::information(0, 0, "Can Not Save Image!!");}
 }
-
-
