@@ -6,9 +6,9 @@ A simple library that improves the user experience when displaying images by Qt'
 
 A simple library that improves the user experience when displaying images by Qt's QLabel and QGraphicsView. It also supports OpenCV Mat array type.
 
-smartGraphicsView supports show-image-functions which supports QImage and Mat (in BGR format). It also supports mouse clicks, moves, and wheel events.
+smartGraphicsView supports show image functions which supports QImage and Mat (in BGR format). It also supports mouse clicks, moves, and wheel events.
 
-smartLabel supports show-image-functions which supports QImage and Mat (in BGR format). It also supports mouse clicks events.
+smartLabel supports show image functions which supports QImage and Mat (in BGR format). It also supports mouse clicks events.
 
 ### Author
 
