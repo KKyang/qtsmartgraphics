@@ -12,7 +12,7 @@ smartLabel supports show image functions which supports QImage and Mat (in BGR f
 
 ### Author
 
-Original by Shih-Jhong Yu, Revised by KKyang @ NTU BIME BBLab. If there is any bug found, feel free to open an issue at Github.
+Original by Shih-Jhong Yu, Revised by KKyang. If there is any bug found, feel free to open an issue at Github.
 
 ### License
 
