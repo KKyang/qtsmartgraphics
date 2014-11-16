@@ -8,6 +8,8 @@ qSmartLabel::qSmartLabel(QWidget *parent) :
 {
     saveAction = new QAction("Save Image", this);
     connect(saveAction, SIGNAL(triggered()), this, SLOT(on_saveAction_triggered()));
+
+    this->setPixmap(QPixmap(QSize(0,0)));  //A dummy prevent application crash.
 }
 
 void qSmartLabel::mousePressEvent(QMouseEvent *ev)
