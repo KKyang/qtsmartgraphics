@@ -4,8 +4,8 @@
 // Protected under LPGLv3 license.
 //M*/
 
-#ifndef QSMARTLABEL_H
-#define QSMARTLABEL_H
+#ifndef SMARTLABEL_H
+#define SMARTLABEL_H
 
 #include <QDateTime>
 #include <QDebug>
@@ -15,11 +15,11 @@
 
 
 
-class qSmartLabel : public QLabel
+class QSmartLabel : public QLabel
 {
     Q_OBJECT
 public:
-    explicit qSmartLabel(QWidget *parent = 0);
+    explicit QSmartLabel(QWidget *parent = 0);
     void mousePressEvent(QMouseEvent *ev);
     void mouseReleaseEvent(QMouseEvent *ev);
 signals:
@@ -32,4 +32,4 @@ private:
     QAction *saveAction;
 };
 
-#endif // QSMARTLABEL_H
+#endif // SMARTLABEL_H

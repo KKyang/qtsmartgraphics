@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="qSmartGraphicsView" name="graphicsView">
+   <widget class="QSmartGraphicsView" name="graphicsView">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -60,9 +60,9 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>qSmartGraphicsView</class>
+   <class>QSmartGraphicsView</class>
    <extends>QGraphicsView</extends>
-   <header>qsmartgraphicsview.h</header>
+   <header location="global">qsmartgraphicsview.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

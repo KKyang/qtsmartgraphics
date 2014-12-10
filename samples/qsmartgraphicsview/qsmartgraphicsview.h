@@ -21,12 +21,12 @@
 #include "opencv2/opencv.hpp"
 #endif
 
-class qSmartGraphicsView : public QGraphicsView
+class QSmartGraphicsView : public QGraphicsView
 {
     Q_OBJECT
 public:
-    explicit qSmartGraphicsView(QWidget *parent = 0);
-    ~qSmartGraphicsView();
+    explicit QSmartGraphicsView(QWidget *parent = 0);
+    ~QSmartGraphicsView();
     void initialize(const int _img_num, const int width, const int height, int changeRow = 4);
 #ifdef HAVE_OPENCV
     void setImage(const cv::Mat &img);
@@ -59,4 +59,4 @@ private:
 };
 
 
-#endif // QSMARTGRAPHICSVIEW_H
+#endif // SMARTGRAPHICSVIEW_H

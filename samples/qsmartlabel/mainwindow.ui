@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="qSmartLabel" name="label">
+   <widget class="QSmartLabel" name="label">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -66,9 +66,9 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>qSmartLabel</class>
+   <class>QSmartLabel</class>
    <extends>QLabel</extends>
-   <header>qsmartlabel.h</header>
+   <header location="global">qsmartlabel.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

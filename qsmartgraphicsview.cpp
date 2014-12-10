@@ -10,11 +10,11 @@
 #include <QReadWriteLock>
 extern QReadWriteLock lock;
 
-qSmartGraphicsView::qSmartGraphicsView(QWidget *parent) :
+QSmartGraphicsView::QSmartGraphicsView(QWidget *parent) :
     QGraphicsView(parent)
 {
 	this->setTransformationAnchor(QGraphicsView::NoAnchor);
-    this->setMouseTracking(true);
+    this->setMouseTracking(true);    
     saveAction = new QAction("Save Image", this);
     connect(saveAction, SIGNAL(triggered()), this, SLOT(on_saveAction_triggered()));
     img_num = 0;
@@ -22,15 +22,15 @@ qSmartGraphicsView::qSmartGraphicsView(QWidget *parent) :
     this->setScene(scene);
 }
 
-qSmartGraphicsView::~qSmartGraphicsView()
+QSmartGraphicsView::~QSmartGraphicsView()
 {
     scene->clear();
     delete scene;
 }
 
-void qSmartGraphicsView::initialize(const int _img_num, const int width, const int height, int changeRow)
+void QSmartGraphicsView::initialize(const int _img_num, const int width, const int height, int changeRow)
 {
-    const int CHANGE = changeRow > _img_num ? (_img_num / 2) : changeRow;
+    const int CHANGE = changeRow > _img_num ? _img_num : changeRow;
     img_num = _img_num;
     const size_t CAP_NUM = img_num;
     //Clear
@@ -42,21 +42,22 @@ void qSmartGraphicsView::initialize(const int _img_num, const int width, const i
         QGraphicsPixmapItem *pix_item = scene->addPixmap(QPixmap(width, height));
         pix_item_vec.push_back(pix_item);
     }
-    // Layout
 
-    const int spacing = 30;
-
+    int hori_spacing = 0, verti_spacing = 0; //30 default
     pix_item_vec[0]->setPos(0, 0);
+    QPointF p = pix_item_vec[0]->pos();
     for(size_t i = 1; i < CAP_NUM; i++)
-    {
-        QPointF p = pix_item_vec[i-1]->pos();
-        pix_item_vec[i]->setPos(p.x() + width + spacing, p.y() + (int)(i / CHANGE) * height + spacing);
+    {        
+        hori_spacing = (i % CHANGE) == 0 ? 0 : 30;
+        verti_spacing = (i < CHANGE) ? 0 : 30;
+
+        pix_item_vec[i]->setPos(p.x() + width * (i % CHANGE) + hori_spacing, p.y() + (int)(i / CHANGE) * height + verti_spacing);
     }
-    this->fitInView(0, 0, width*img_num, height, Qt::KeepAspectRatio);
+    this->fitInView(0, 0, width * CHANGE, height * CHANGE + verti_spacing * (CAP_NUM / CHANGE), Qt::KeepAspectRatio);
 }
 
 #ifdef HAVE_OPENCV
-void qSmartGraphicsView::setImage(const cv::Mat &img)
+void QSmartGraphicsView::setImage(const cv::Mat &img)
 {
     QImage img_temp(img.cols, img.rows, QImage::Format_RGB888);
     lock.lockForRead();
@@ -67,7 +68,7 @@ void qSmartGraphicsView::setImage(const cv::Mat &img)
     pix_item_vec[0]->setPixmap(QPixmap::fromImage(img_temp.rgbSwapped()));
 }
 
-void qSmartGraphicsView::setImage(const std::vector<cv::Mat> &imgs)
+void QSmartGraphicsView::setImage(const std::vector<cv::Mat> &imgs)
 {
     lock.lockForRead();
     for(size_t i = 0; i < imgs.size(); ++i){
@@ -85,22 +86,22 @@ void qSmartGraphicsView::setImage(const std::vector<cv::Mat> &imgs)
 }
 #endif
 
-void qSmartGraphicsView::setImagefromQImage(const QImage &qimg)
+void QSmartGraphicsView::setImagefromQImage(const QImage &qimg)
 {
     pix_item_vec[0]->setPixmap(QPixmap::fromImage(qimg));
 }
 
-void qSmartGraphicsView::updateImg()
+void QSmartGraphicsView::updateImg()
 {
     QList<QGraphicsItem *> item_list = this->items(this->rect());
     for(int i = 0; i < item_list.size(); ++i){
         QGraphicsPixmapItem *item = dynamic_cast<QGraphicsPixmapItem*>(item_list[i]);
         if(item)
-            item->update();
+            item->update();        
     }
 }
 
-void qSmartGraphicsView::setImagefromQImage(const std::vector<QImage> &qimgs)
+void QSmartGraphicsView::setImagefromQImage(const std::vector<QImage> &qimgs)
 {
     lock.lockForRead();
     for(size_t i = 0; i < qimgs.size(); ++i)
@@ -112,7 +113,7 @@ void qSmartGraphicsView::setImagefromQImage(const std::vector<QImage> &qimgs)
     }
 }
 
-void qSmartGraphicsView::wheelEvent(QWheelEvent *event)
+void QSmartGraphicsView::wheelEvent(QWheelEvent *event)
 {
 	if(event->delta() == 0)
 		return;
@@ -132,7 +133,7 @@ void qSmartGraphicsView::wheelEvent(QWheelEvent *event)
 	this->centerOn(pt);
 }
 
-void qSmartGraphicsView::mouseMoveEvent(QMouseEvent *event)
+void QSmartGraphicsView::mouseMoveEvent(QMouseEvent *event)
 {
 	if(event->buttons() == Qt::LeftButton){
 		this->translate(( -mou_x + event->x())/1.0, ( -mou_y + event->y())/1.0);
@@ -145,10 +146,10 @@ void qSmartGraphicsView::mouseMoveEvent(QMouseEvent *event)
 
 }
 
-void qSmartGraphicsView::mousePressEvent(QMouseEvent *event)
+void QSmartGraphicsView::mousePressEvent(QMouseEvent *event)
 {
     mou_x = event->x();
-	mou_y = event->y();
+	mou_y = event->y();    
 	if(event->button() == Qt::LeftButton)
 		this->setCursor(Qt::ClosedHandCursor);
     else if(event->button() == Qt::MidButton)
@@ -156,7 +157,7 @@ void qSmartGraphicsView::mousePressEvent(QMouseEvent *event)
     emit sendMousePress();
 }
 
-void qSmartGraphicsView::mouseDoubleClickEvent(QMouseEvent *event)
+void QSmartGraphicsView::mouseDoubleClickEvent(QMouseEvent *event)
 {
     QGraphicsPixmapItem *item = dynamic_cast<QGraphicsPixmapItem *>(this->itemAt(event->pos()));
     if(!item)
@@ -167,7 +168,7 @@ void qSmartGraphicsView::mouseDoubleClickEvent(QMouseEvent *event)
         emit sendItemMouXY(local_pt.x(), local_pt.y());
 }
 
-void qSmartGraphicsView::mouseReleaseEvent(QMouseEvent *event)
+void QSmartGraphicsView::mouseReleaseEvent(QMouseEvent *event)
 {
     this->setCursor(Qt::ArrowCursor);
     if(event->button() == Qt::RightButton){
@@ -177,7 +178,7 @@ void qSmartGraphicsView::mouseReleaseEvent(QMouseEvent *event)
     }
 }
 
-void qSmartGraphicsView::on_saveAction_triggered()
+void QSmartGraphicsView::on_saveAction_triggered()
 {
     bool isError = false;
     if(img_num == 0) {return;}
