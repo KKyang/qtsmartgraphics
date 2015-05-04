@@ -51,7 +51,7 @@ void QSmartGraphicsView::initialize(const int _img_num, const int width, const i
         hori_spacing = (i % CHANGE) == 0 ? 0 : 30;
         verti_spacing = (i < CHANGE) ? 0 : 30;
 
-        pix_item_vec[i]->setPos(p.x() + width * (i % CHANGE) + hori_spacing, p.y() + (int)(i / CHANGE) * height + verti_spacing);
+        pix_item_vec[i]->setPos(p.x() + width * (i % CHANGE) + hori_spacing * (i % CHANGE), p.y() + (int)(i / CHANGE) * height + verti_spacing);
     }
     this->fitInView(0, 0, width * CHANGE, height * CHANGE + verti_spacing * (CAP_NUM / CHANGE), Qt::KeepAspectRatio);
 }
