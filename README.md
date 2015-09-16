@@ -10,6 +10,10 @@ smartGraphicsView supports show image functions which supports QImage and Mat (i
 
 smartLabel supports show image functions which supports QImage and Mat (in BGR format). It also supports mouse clicks events.
 
+### Usage
+
+qtsmartgraphics now uses OpenGL. Before Qt 5.5 you have to use OpenGL version. After Qt 5.5 you'll have to add opengl module in the *.pro file. (QT += opengl)
+
 ### Author
 
 Original by Shih-Jhong Yu, Revised by KKyang. If there is any bug found, feel free to open an issue at Github.
