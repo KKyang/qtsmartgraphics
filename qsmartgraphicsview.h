@@ -8,6 +8,7 @@
 #define QSMARTGRAPHICSVIEW_H
 
 #include <QFileInfo>
+#include <QGL>
 #include <QGraphicsItem>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsView>

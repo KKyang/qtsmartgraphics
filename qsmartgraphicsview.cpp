@@ -20,6 +20,8 @@ QSmartGraphicsView::QSmartGraphicsView(QWidget *parent) :
     img_num = 0;
     scene = new QGraphicsScene;
     this->setScene(scene);
+    this->setViewport(new QGLWidget(QGLFormat(QGL::SampleBuffers | QGL::DirectRendering)));
+    this->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
 }
 
 QSmartGraphicsView::~QSmartGraphicsView()
@@ -59,12 +61,15 @@ void QSmartGraphicsView::initialize(const int _img_num, const int width, const i
 #ifdef HAVE_OPENCV
 void QSmartGraphicsView::setImage(const cv::Mat &img)
 {
-    QImage img_temp(img.cols, img.rows, QImage::Format_RGB888);
-    lock.lockForRead();
-    for(int y = 0; y < img.rows; ++y){
-        memcpy(img_temp.scanLine(y), img.data + y * img.cols * 3, img.cols * 3);
-    }
-    lock.unlock();
+      lock.lockForRead();
+      QImage img_temp = QImage((uchar*)img.data, img.cols, img.rows, img.step, QImage::Format_RGB888);
+      lock.unlock();
+//    QImage img_temp(img.cols, img.rows, QImage::Format_RGB888);
+//    lock.lockForRead();
+//    for(int y = 0; y < img.rows; ++y){
+//        memcpy(img_temp.scanLine(y), img.data + y * img.cols * 3, img.cols * 3);
+//    }
+//    lock.unlock();
     pix_item_vec[0]->setPixmap(QPixmap::fromImage(img_temp.rgbSwapped()));
 }
 
