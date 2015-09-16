@@ -69,6 +69,7 @@ void QSmartGraphicsView::setImage(const cv::Mat &img)
       lock.lockForRead();
       QImage img_temp = QImage((uchar*)img.data, img.cols, img.rows, img.step, QImage::Format_RGB888);
       lock.unlock();
+//memcpy slows down the performance. Don't know why. :(
 //    QImage img_temp(img.cols, img.rows, QImage::Format_RGB888);
 //    lock.lockForRead();
 //    for(int y = 0; y < img.rows; ++y){

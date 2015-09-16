@@ -23,7 +23,8 @@ public:
     void mousePressEvent(QMouseEvent *ev);
     void mouseReleaseEvent(QMouseEvent *ev);
 signals:
-    void sendMouXY(double x, double y); // 0~1, 0~1
+    // 0~1, 0~1
+    void sendMouXY(double x, double y); //!< Sends the mouse coordinate of the image when clicked the image.
 public slots:
 private slots:
     void on_saveAction_triggered();
