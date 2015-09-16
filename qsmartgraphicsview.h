@@ -18,7 +18,9 @@
 #include <QVector>
 
 #include <vector>
+#ifdef HAVE_OPENCV
 #include "opencv2/opencv.hpp"
+#endif
 
 class QSmartGraphicsView : public QGraphicsView
 {

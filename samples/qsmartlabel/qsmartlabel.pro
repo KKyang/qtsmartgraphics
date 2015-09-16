@@ -14,9 +14,9 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    qsmartlabel.cpp
+    ../../qsmartlabel.cpp
 
 HEADERS  += mainwindow.h \
-    qsmartlabel.h
+    ../../qsmartlabel.h
 
 FORMS    += mainwindow.ui
