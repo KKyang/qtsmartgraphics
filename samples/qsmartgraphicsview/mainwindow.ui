@@ -39,6 +39,7 @@
      <string>Files</string>
     </property>
     <addaction name="actionLoad_Image"/>
+    <addaction name="actionExit"/>
    </widget>
    <addaction name="menuFiles"/>
   </widget>
@@ -54,6 +55,11 @@
   <action name="actionLoad_Image">
    <property name="text">
     <string>Load Image</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
    </property>
   </action>
  </widget>

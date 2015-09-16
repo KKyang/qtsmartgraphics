@@ -19,6 +19,8 @@ public:
 private slots:
     void on_actionLoad_Image_triggered();
 
+    void on_actionExit_triggered();
+
 private:
     Ui::MainWindow *ui;
 };

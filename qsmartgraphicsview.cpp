@@ -13,10 +13,14 @@ extern QReadWriteLock lock;
 QSmartGraphicsView::QSmartGraphicsView(QWidget *parent) :
     QGraphicsView(parent)
 {
+    qRegisterMetaType<std::vector<QPixmap>>("std::vector<QPixmap>");
 	this->setTransformationAnchor(QGraphicsView::NoAnchor);
-    this->setMouseTracking(true);    
+    this->setMouseTracking(true);
+    clipboard = QApplication::clipboard();
     saveAction = new QAction("Save Image", this);
+    copyToClipBoardAction = new QAction("Copy to Clipboard", this);
     connect(saveAction, SIGNAL(triggered()), this, SLOT(on_saveAction_triggered()));
+    connect(copyToClipBoardAction, SIGNAL(triggered()), this, SLOT(on_copyToClipboardAction_triggered()));
     img_num = 0;
     scene = new QGraphicsScene;
     this->setScene(scene);
@@ -56,6 +60,7 @@ void QSmartGraphicsView::initialize(const int _img_num, const int width, const i
         pix_item_vec[i]->setPos(p.x() + width * (i % CHANGE) + hori_spacing * (i % CHANGE), p.y() + (int)(i / CHANGE) * height + verti_spacing);
     }
     this->fitInView(0, 0, width * CHANGE, height * CHANGE + verti_spacing * (CAP_NUM / CHANGE), Qt::KeepAspectRatio);
+    _initial = true;
 }
 
 #ifdef HAVE_OPENCV
@@ -179,6 +184,8 @@ void QSmartGraphicsView::mouseReleaseEvent(QMouseEvent *event)
     if(event->button() == Qt::RightButton){
         QMenu m(this);
         m.addAction(saveAction);
+        m.addAction(copyToClipBoardAction);
+        mou_press = event->pos();
         m.exec(event->globalPos());
     }
 }
@@ -216,5 +223,21 @@ void QSmartGraphicsView::on_saveAction_triggered()
         if(!pix_item_vec[0]->pixmap().isNull()){pix_item_vec[0]->pixmap().save(file_name.absoluteFilePath());}
         else{isError = true;}
     }
+    if(isError){QMessageBox::information(0, 0, "Can Not Save Image!!");}
+}
+
+void QSmartGraphicsView::on_copyToClipboardAction_triggered()
+{
+    bool isError = false;
+    if(img_num == 0) {return;}
+
+    clipboard->clear();
+
+    QGraphicsPixmapItem *item = dynamic_cast<QGraphicsPixmapItem *>(this->itemAt(mou_press));
+
+    if(!item){isError = true;}
+    else if(!item->pixmap().isNull()){clipboard->setPixmap(item->pixmap());}
+    else{isError = true;}
+
     if(isError){QMessageBox::information(0, 0, "Can Not Save Image!!");}
 }

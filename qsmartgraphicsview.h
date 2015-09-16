@@ -7,12 +7,15 @@
 #ifndef QSMARTGRAPHICSVIEW_H
 #define QSMARTGRAPHICSVIEW_H
 
+#include <QApplication>
+#include <QClipboard>
 #include <QFileInfo>
 #include <QGL>
 #include <QGraphicsItem>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsView>
 #include <QList>
+#include <QMimeData>
 #include <QWheelEvent>
 #include <QMessageBox>
 #include <QVector>
@@ -28,14 +31,18 @@ class QSmartGraphicsView : public QGraphicsView
 public:
     explicit QSmartGraphicsView(QWidget *parent = 0);
     ~QSmartGraphicsView();
-    void initialize(const int _img_num, const int width, const int height, int changeRow = 4);
+    void initialize(const int _img_num, const int width, const int height, int changeRow = 4); //Must initial before use.
+
+    //Set images.
 #ifdef HAVE_OPENCV
     void setImage(const cv::Mat &img);
     void setImage(const std::vector<cv::Mat> &imgs);
 #endif
     void setImagefromQImage(const QImage &qimg);
     void setImagefromQImage(const std::vector<QImage> &qimgs);
-    int getImgNum(){return img_num;}
+
+    bool isInitial() const{return _initial;} //Returns true if initialized before.
+    int getImgNum(){return img_num;} //Get image number.
 protected:
     void wheelEvent(QWheelEvent *event);
     void mousePressEvent(QMouseEvent *event);
@@ -50,12 +57,18 @@ public slots:
     void updateImg();
 private slots:
     void on_saveAction_triggered();
+    void on_copyToClipboardAction_triggered();
 private:
-    QAction *saveAction;
+    QAction *saveAction, *copyToClipBoardAction;
+    QClipboard *clipboard;
     QGraphicsScene *scene;
     QVector<QGraphicsPixmapItem*> pix_item_vec;
+
+    QPoint mou_press;
 	int mou_x;
 	int mou_y;
+
+    bool _initial = false;
     int img_num;
 };
 
