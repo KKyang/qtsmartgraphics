@@ -64,12 +64,12 @@ private:
     QGraphicsScene *scene;
     QVector<QGraphicsPixmapItem*> pix_item_vec;
 
-    QPoint mou_press;
-	int mou_x;
-	int mou_y;
+    QPoint mou_press; //Save the mouse position when right click.
+    int mou_x; //Records the last mouse x position in mouseMoveEvent.
+    int mou_y; //Records the last mouse y position in mouseMoveEvent.
 
-    bool _initial = false;
-    int img_num;
+    bool _initial = false; //Set to true if initialized before.
+    int img_num; //Image nums.
 };
 
 
