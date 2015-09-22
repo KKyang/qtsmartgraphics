@@ -20,3 +20,5 @@ HEADERS  += mainwindow.h \
     ../../qsmartlabel.h
 
 FORMS    += mainwindow.ui
+
+INCLUDEPATH += $$quote(../../)
