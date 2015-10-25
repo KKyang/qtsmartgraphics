@@ -10,7 +10,6 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QFileInfo>
-#include <QGL>
 #include <QGraphicsItem>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsView>
@@ -24,6 +23,10 @@
 #ifdef HAVE_OPENCV
 #include "opencv2/opencv.hpp"
 #endif
+#ifdef QT_OPENGL_LIB
+#include <QGL>
+#endif
+
 
 /*! QSmartGraphicsView main class. Provides user a more advance image viewing widget.*/
 class QSmartGraphicsView : public QGraphicsView

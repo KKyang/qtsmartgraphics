@@ -24,8 +24,10 @@ QSmartGraphicsView::QSmartGraphicsView(QWidget *parent) :
     img_num = 0;
     scene = new QGraphicsScene;
     this->setScene(scene);
+#ifdef QT_OPENGL_LIB
     this->setViewport(new QGLWidget(QGLFormat(QGL::SampleBuffers | QGL::DirectRendering)));
     this->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
+#endif
 }
 
 QSmartGraphicsView::~QSmartGraphicsView()
