@@ -12,7 +12,9 @@ smartLabel supports show image functions which supports QImage and Mat (in BGR f
 
 ### Usage
 
-qtsmartgraphics now uses OpenGL. Before Qt 5.5 you have to use OpenGL version. After Qt 5.5 you'll have to add opengl module in the *.pro file. (QT += opengl)
+You can choose to use OpenGL or not. If you wish to use OpenGL, you'll have to use OpenGL version (<QT 5.5) or add opengl module in the *.pro file (>=QT5.5). (QT += opengl)
+
+~~qtsmartgraphics now uses OpenGL. Before Qt 5.5 you have to use OpenGL version. After Qt 5.5 you'll have to add opengl module in the *.pro file. (QT += opengl)~~
 
 ### Documentation
 
