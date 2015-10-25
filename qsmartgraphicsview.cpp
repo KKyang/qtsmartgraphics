@@ -24,14 +24,13 @@ QSmartGraphicsView::QSmartGraphicsView(QWidget *parent) :
     img_num = 0;
     scene = new QGraphicsScene;
 
-//    QPushButton* selectButton = new QPushButton("S", this);
-//    selectButton->setGeometry(0, 0, 30, 30);
-//    selectButton->setCheckable(true);
-//    scene->addWidget(selectButton);
-
-//    connect(selectButton, SIGNAL(clicked()), this, SLOT(on_selectRegion_triggered()));
-
-    this->setScene(scene);
+    //New side button bar. Not finished.
+//    QSideButtonBar *sbtn = new QSideButtonBar(1, this);
+//    sbtn->renameButtonID("SavePicture", 0);
+//    sbtn->renameButtonText("S", 0);
+//    scene->addWidget(sbtn);
+//    connect(sbtn->returnButtonByName("SavePicture"), SIGNAL(clicked()), this, SLOT(on_saveAction_triggered()));
+//    this->setScene(scene);
 
 #ifdef QT_OPENGL_LIB
     this->setViewport(new QGLWidget(QGLFormat(QGL::SampleBuffers | QGL::DirectRendering)));

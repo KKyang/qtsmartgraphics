@@ -8,19 +8,21 @@
 #define QSMARTGRAPHICSVIEW_H
 
 #include <QApplication>
+#include <QButtonGroup>
 #include <QClipboard>
 #include <QFileInfo>
 #include <QGraphicsItem>
 #include <QGraphicsPixmapItem>
-#include <QGraphicsProxyWidget>
 #include <QGraphicsView>
-#include <QHBoxLayout>
 #include <QList>
 #include <QMimeData>
 #include <QPushButton>
+#include <QStyleOption>
 #include <QWheelEvent>
 #include <QMessageBox>
 #include <QVector>
+
+#include <QDebug>
 
 #include <vector>
 #ifdef HAVE_OPENCV
@@ -79,6 +81,90 @@ private:
     bool _initial = false; //!< Set to true if initialized before.
     int img_num; //!< The number of images set in QSmartGraphicsView.
 };
+
+struct btnID{
+    QPushButton* btn;
+    QString ID;
+};
+
+class QSideButtonBar : public QWidget
+{
+    Q_OBJECT
+public:
+    QSideButtonBar(QWidget *parent = 0) : QWidget(parent){
+        this->setStyleSheet("QSideButtonBar{border: 2px solid grey;}");
+    }
+    QSideButtonBar(int button_num, QWidget *parent = 0) : QWidget(parent){
+        this->setStyleSheet("QSideButtonBar{border: 2px solid grey;}");
+        btn.resize(button_num);
+        for(int i = 0; i < btn.size(); i++)
+        {
+            btn[i].btn = new QPushButton(this);
+            btn[i].btn->setCheckable(true);
+            btn[i].btn->setGeometry(0, i * 31 + 0, 30, 30);
+        }
+    }
+
+    ~QSideButtonBar()
+    {
+        btn.clear();
+    }
+
+    void addButton()
+    {
+        btnID newb;
+        newb.ID = "";
+        newb.btn = new QPushButton(this);
+        btn.push_back(newb);
+    }
+
+    void renameButtonText(QString name, int btn_num)
+    {
+        if(btn_num >= 0 && btn_num < btn.size())
+            btn[btn_num].btn->setText(name);
+    }
+
+    void renameButtonID(QString name, int btn_num)
+    {
+        if(btn_num >= 0 && btn_num < btn.size())
+            btn[btn_num].ID = name;
+    }
+
+    int findButtonID(QString name)
+    {
+        int i = 0;
+        for(i = 0; i < btn.size(); i++)
+        {
+            if(!btn[i].ID.compare(name))
+                return i;
+        }
+
+        return -1;
+    }
+
+    QPushButton* returnButtonByName(QString name)
+    {
+        int i = 0;
+        for(i = 0; i < btn.size(); i++)
+        {
+            if(!btn[i].ID.compare(name))
+                return btn[i].btn;
+        }
+
+        return NULL;
+    }
+
+    std::vector<btnID> btn;
+private:
+    void paintEvent(QPaintEvent *)
+    {
+        QStyleOption opt;
+        opt.init(this);
+        QPainter p(this);
+        style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
+    }
+};
+
 
 
 #endif // SMARTGRAPHICSVIEW_H
