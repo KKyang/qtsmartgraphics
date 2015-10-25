@@ -12,9 +12,12 @@
 #include <QFileInfo>
 #include <QGraphicsItem>
 #include <QGraphicsPixmapItem>
+#include <QGraphicsProxyWidget>
 #include <QGraphicsView>
+#include <QHBoxLayout>
 #include <QList>
 #include <QMimeData>
+#include <QPushButton>
 #include <QWheelEvent>
 #include <QMessageBox>
 #include <QVector>
@@ -60,6 +63,7 @@ signals:
 public slots:
     void updateImg();
 private slots:
+    void on_selectRegion_triggered();
     void on_saveAction_triggered(); //!< A right click menu function. Saves all the images on QSmartGraphicsView to system.
     void on_copyToClipboardAction_triggered(); //!< A right click menu function. Copy the selected image to the system clipboard.
 private:

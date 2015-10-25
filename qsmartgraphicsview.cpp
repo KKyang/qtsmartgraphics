@@ -23,11 +23,25 @@ QSmartGraphicsView::QSmartGraphicsView(QWidget *parent) :
     connect(copyToClipBoardAction, SIGNAL(triggered()), this, SLOT(on_copyToClipboardAction_triggered()));
     img_num = 0;
     scene = new QGraphicsScene;
+
+//    QPushButton* selectButton = new QPushButton("S", this);
+//    selectButton->setGeometry(0, 0, 30, 30);
+//    selectButton->setCheckable(true);
+//    scene->addWidget(selectButton);
+
+//    connect(selectButton, SIGNAL(clicked()), this, SLOT(on_selectRegion_triggered()));
+
     this->setScene(scene);
+
 #ifdef QT_OPENGL_LIB
     this->setViewport(new QGLWidget(QGLFormat(QGL::SampleBuffers | QGL::DirectRendering)));
     this->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
 #endif
+}
+
+void QSmartGraphicsView::on_selectRegion_triggered()
+{
+    qDebug() << "mew";
 }
 
 QSmartGraphicsView::~QSmartGraphicsView()
