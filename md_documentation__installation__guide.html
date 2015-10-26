@@ -127,9 +127,15 @@ $(document).ready(function(){initNavTree('md_documentation__installation__guide.
 
 QReadWriteLock lock;
 </pre></li>
-<li>If your Qt version is older than 5.5, use the OpenGL compiler. For Qt 5.5 or later, add <code>QT += opengl</code> in your .pro file.</li>
-<li><p class="startli">If want to use with OpenCV, simply add <code>DEFINE += HAVE_OPENCV</code> to .pro file.</p>
-<p class="startli">(Currently only qSmartGraphicsView needs to add this line.)</p>
+<li><p class="startli">Functions below can be turned on or off individually.</p>
+<p class="startli"><b>OpenCV</b></p>
+<p class="startli">If you wish to use OpenCV, add DEFINE += HAVE_OPENCV in your *.pro file.</p>
+<p class="startli"><b>OpenGL</b></p>
+<p class="startli">If you wish to use OpenGL, you'll have to use OpenGL version (&lt; QT 5.5) or add opengl module in the *.pro file (&gt;= QT5.5). (QT += opengl)</p>
+<p class="startli"><b><a class="el" href="class_q_side_button_bar.html">QSideButtonBar</a></b></p>
+<p class="startli">If you wish to turn off the SideButtonBar, add DEFINES += NO_SIDEMENU in your *.pro file.</p>
+<p class="startli"><b>QtSVG</b></p>
+<p class="startli">If you wish to use icon for your QtSmartGraphicsView, add svg module in the *.pro file. (QT += svg)</p>
 </li>
 <li>Done. </li>
 </ol>
