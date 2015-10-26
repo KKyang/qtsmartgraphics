@@ -18,29 +18,60 @@ QSmartGraphicsView::QSmartGraphicsView(QWidget *parent) :
     this->setMouseTracking(true);
     clipboard = QApplication::clipboard();
     saveAction = new QAction("Save Image", this);
-    copyToClipBoardAction = new QAction("Copy to Clipboard", this);
+    copyToClipBoardAction = new QAction("Copy to Clipboard", this);   
     connect(saveAction, SIGNAL(triggered()), this, SLOT(on_saveAction_triggered()));
     connect(copyToClipBoardAction, SIGNAL(triggered()), this, SLOT(on_copyToClipboardAction_triggered()));
+
+#ifndef NO_SIDEMENU
+    hideSideBar = new QAction("Hide Side Bar", this);
+    hideSideBar->setCheckable(true);
+    copySelectedRegion = new QAction("Copy Selected Region", this);
+    connect(hideSideBar, SIGNAL(triggered()), this, SLOT(on_hideSideBar_triggered()));
+    connect(copySelectedRegion, SIGNAL(triggered()), this, SLOT(on_copySelectedRegionAction_triggered()));
+#endif
     img_num = 0;
     scene = new QGraphicsScene;
 
+#ifndef NO_SIDEMENU
     //New side button bar. Not finished.
-//    QSideButtonBar *sbtn = new QSideButtonBar(1, this);
-//    sbtn->renameButtonID("SavePicture", 0);
-//    sbtn->renameButtonText("S", 0);
-//    scene->addWidget(sbtn);
-//    connect(sbtn->returnButtonByName("SavePicture"), SIGNAL(clicked()), this, SLOT(on_saveAction_triggered()));
-//    this->setScene(scene);
+    sbtn = new QSideButtonBar(2, this);
+    sbtn->renameButtonID("Normal", 0);   
+    sbtn->renameButtonID("Select", 1);
+#ifdef QT_SVG_LIB
+    QIcon normalsvg(":/d/dark/eye.svg");
+    QIcon selectsvg(":/d/dark/alignment-align.svg");
+    if(normalsvg.isNull() || selectsvg.isNull())
+    {
+        sbtn->renameButtonText("N", 0);
+        sbtn->renameButtonText("S", 1);
+    }
+    else
+    {
+        sbtn->setButtonIcon("Normal", normalsvg);
+        sbtn->setButtonIcon("Select", selectsvg);
+    }
 
+#else
+    sbtn->renameButtonText("N", 0);
+    sbtn->renameButtonText("S", 1);
+#endif
+    connect(sbtn->returnButtonByName("Normal"), SIGNAL(clicked()), this, SLOT(on_normal_triggered()));
+    connect(sbtn->returnButtonByName("Select"), SIGNAL(clicked()), this, SLOT(on_selectRegion_triggered()));
+    sbtn->returnButtonByName("Normal")->setChecked(true);
+    QButtonGroup* group = new QButtonGroup(this);
+    group->addButton(sbtn->returnButtonByName("Normal"));
+    group->addButton(sbtn->returnButtonByName("Select"));
+    group->setExclusive(true);
+    mEffect = new QGraphicsOpacityEffect(sbtn);
+    mEffect->setOpacity(1.0);
+    sbtn->setGraphicsEffect(mEffect);
+    scene->addWidget(sbtn);
+#endif
+    this->setScene(scene);
 #ifdef QT_OPENGL_LIB
     this->setViewport(new QGLWidget(QGLFormat(QGL::SampleBuffers | QGL::DirectRendering)));
-    this->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
 #endif
-}
-
-void QSmartGraphicsView::on_selectRegion_triggered()
-{
-    qDebug() << "mew";
+    this->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
 }
 
 QSmartGraphicsView::~QSmartGraphicsView()
@@ -155,31 +186,106 @@ void QSmartGraphicsView::wheelEvent(QWheelEvent *event)
 		factor = 0.9;
 	else
 		factor = 1;
+#ifndef NO_SIDEMENU
+    if(rubberBand)
+    {
+        rubberBand->hide();
+    }
+#endif
 	this->scale(factor, factor);
-	this->centerOn(pt);
+    this->centerOn(pt);
 }
 
 void QSmartGraphicsView::mouseMoveEvent(QMouseEvent *event)
 {
-	if(event->buttons() == Qt::LeftButton){
+#ifndef NO_SIDEMENU
+    if((mouse_status == 0) && event->buttons() == Qt::LeftButton){
+#endif
 		this->translate(( -mou_x + event->x())/1.0, ( -mou_y + event->y())/1.0);
 		this->setCursor(Qt::ClosedHandCursor);
 		//QMessageBox::information(0, QString::number(mou_x - event->x()), QString::number(mou_y - event->y()));
-	}
-	this->setCursor(Qt::OpenHandCursor);
+        this->setCursor(Qt::OpenHandCursor);
+#ifndef NO_SIDEMENU
+    }
+    else if((mouse_status == 1) && (event->modifiers() & Qt::ControlModifier) && event->buttons() == Qt::LeftButton){
+        this->translate(( -mou_x + event->x())/1.0, ( -mou_y + event->y())/1.0);
+        this->setCursor(Qt::ClosedHandCursor);
+        //QMessageBox::information(0, QString::number(mou_x - event->x()), QString::number(mou_y - event->y()));
+        this->setCursor(Qt::OpenHandCursor);
+    }
+    else if((mouse_status == 1) && event->buttons() == Qt::LeftButton)
+    {
+        if(!is_item)
+        {
+            QGraphicsPixmapItem *item = dynamic_cast<QGraphicsPixmapItem *>(this->itemAt(event->pos()));
+            if(!item)
+                return;
+            select_item_start = this->mapFromScene(item->mapToScene(0, 0));
+            select_item_bound = this->mapFromScene(item->mapToScene(item->boundingRect().width(),item->boundingRect().height()));
+            int&& pos_x = (event->pos().x()) > select_item_bound.x() ? select_item_bound.x() : (event->pos().x() < select_item_start.x() ? select_item_start.x() : event->pos().x());
+            int&& pos_y = (event->pos().y()) > select_item_bound.y() ? select_item_bound.y() : (event->pos().y() < select_item_start.y() ? select_item_start.y() : event->pos().y());
+            select_start = QPoint(pos_x, pos_y);
+            rubberBand->setGeometry(QRect(select_start.toPoint(), QSize()));
+            rubberBand->show();
+            is_item = true;
+            return;
+        }
+
+        int&& pos_x = (event->pos().x()) > select_item_bound.x() ? select_item_bound.x() : (event->pos().x() < select_item_start.x() ? select_item_start.x() : event->pos().x());
+        int&& pos_y = (event->pos().y()) > select_item_bound.y() ? select_item_bound.y() : (event->pos().y() < select_item_start.y() ? select_item_start.y() : event->pos().y());
+        rubberBand->setGeometry(QRect(select_start.toPoint(), QPoint(pos_x, pos_y)).normalized());
+    }
+#endif
+
+
 	mou_x = event->x();
 	mou_y = event->y();
-
 }
 
 void QSmartGraphicsView::mousePressEvent(QMouseEvent *event)
 {
     mou_x = event->x();
 	mou_y = event->y();    
-	if(event->button() == Qt::LeftButton)
+    if(
+#ifndef NO_SIDEMENU
+            (mouse_status == 0) &&
+#endif
+            (event->button() == Qt::LeftButton))
 		this->setCursor(Qt::ClosedHandCursor);
+#ifndef NO_SIDEMENU
+    else if(_initial && (mouse_status == 1) && event->buttons() == Qt::LeftButton)
+    {
+        if (!rubberBand)
+            rubberBand = new QRubberBand(QRubberBand::Rectangle, this);
+        this->setDragMode(QGraphicsView::RubberBandDrag);
+
+        QGraphicsPixmapItem *item = dynamic_cast<QGraphicsPixmapItem *>(this->itemAt(event->pos()));
+        if(!item)
+        {
+            rubberBand->hide();
+            return;
+        }
+
+        select_item_start = this->mapFromScene(item->mapToScene(0, 0));
+        select_item_bound = this->mapFromScene(item->mapToScene(item->boundingRect().width(),item->boundingRect().height()));
+        int&& pos_x = (event->pos().x()) > select_item_bound.x() ? select_item_bound.x() : (event->pos().x() < select_item_start.x() ? select_item_start.x() : event->pos().x());
+        int&& pos_y = (event->pos().y()) > select_item_bound.y() ? select_item_bound.y() : (event->pos().y() < select_item_start.y() ? select_item_start.y() : event->pos().y());
+        select_start = QPoint(pos_x, pos_y);
+        rubberBand->setGeometry(QRect(select_start.toPoint(), QSize()));
+        rubberBand->show();
+        is_item = true;
+    }
+#endif
     else if(event->button() == Qt::MidButton)
+    {
+#ifndef NO_SIDEMENU
+        if(rubberBand)
+        {
+            rubberBand->hide();
+        }
+#endif
         this->fitInView(0, 0, this->sceneRect().width(), this->sceneRect().height(), Qt::KeepAspectRatio);
+    }
     emit sendMousePress();
 }
 
@@ -198,13 +304,38 @@ void QSmartGraphicsView::mouseReleaseEvent(QMouseEvent *event)
 {
     this->setCursor(Qt::ArrowCursor);
     if(event->button() == Qt::RightButton){
-        QMenu m(this);
+        QMenu m(this);       
         m.addAction(saveAction);
         m.addAction(copyToClipBoardAction);
+#ifndef NO_SIDEMENU
+        if(mouse_status == 1)
+        {
+            m.addAction(copySelectedRegion);
+        }
+        m.addSeparator();
+        m.addAction(hideSideBar);
+#endif
         mou_press = event->pos();
         m.exec(event->globalPos());
     }
+#ifndef NO_SIDEMENU
+    else if(event->button() == Qt::LeftButton && this->dragMode() == QGraphicsView::RubberBandDrag)
+    {
+        is_item = false;
+        this->setDragMode(QGraphicsView::NoDrag);
+    }
+#endif
 }
+
+#ifndef NO_SIDEMENU
+void QSmartGraphicsView::keyPressEvent(QKeyEvent *event)
+{
+    if(event->key() == Qt::Key_H)
+    {
+        fadeOut();
+    }
+}
+#endif
 
 void QSmartGraphicsView::on_saveAction_triggered()
 {
@@ -257,3 +388,71 @@ void QSmartGraphicsView::on_copyToClipboardAction_triggered()
 
     if(isError){QMessageBox::information(0, 0, "Can Not Save Image!!");}
 }
+
+#ifndef NO_SIDEMENU
+void QSmartGraphicsView::on_normal_triggered()
+{
+    if(mouse_status == 0)
+    {
+        return;
+    }
+    mouse_status = 0;
+}
+
+void QSmartGraphicsView::on_selectRegion_triggered()
+{
+    if(mouse_status == 1)
+    {
+        return;
+    }
+    mouse_status = 1;
+}
+
+
+void QSmartGraphicsView::on_hideSideBar_triggered()
+{
+    fadeOut();
+}
+
+void QSmartGraphicsView::on_copySelectedRegionAction_triggered()
+{
+    if(!rubberBand)
+        return;
+    if(rubberBand->isHidden())
+        return;
+
+    QGraphicsPixmapItem *item = dynamic_cast<QGraphicsPixmapItem *>(this->itemAt(rubberBand->pos()));
+    if(!item)
+        return;
+
+    QPointF point = item->mapFromScene(this->mapToScene(rubberBand->pos()));
+    QPointF point2 = item->mapFromScene(this->mapToScene(rubberBand->pos().x() + rubberBand->rect().width(), rubberBand->pos().y() + rubberBand->rect().height()));
+
+    QImage cpy_img = item->pixmap().copy(QRect(point.toPoint(), point2.toPoint() - QPoint(1, 1))).toImage();
+    emit sendSelectedRegion(cpy_img);
+}
+
+void QSmartGraphicsView::fadeOut()
+{
+    QPropertyAnimation* animation = new QPropertyAnimation(mEffect,"opacity");
+    animation->setDuration(500);
+    if(sbtn->isVisible())
+    {
+        animation->setStartValue(1.0);
+        animation->setEndValue(0.0);
+        connect(animation,SIGNAL(finished()),this,SLOT(onAnimationFinished()));
+    }
+    else
+    {
+        sbtn->setVisible(true);
+        animation->setStartValue(0.0);
+        animation->setEndValue(1.0);
+    }
+    animation->start(QAbstractAnimation::DeleteWhenStopped);
+}
+
+void QSmartGraphicsView::onAnimationFinished()
+{
+    sbtn->setVisible(false);
+}
+#endif

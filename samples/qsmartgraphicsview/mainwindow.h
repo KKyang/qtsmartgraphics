@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+
 #include <QMainWindow>
 #include <QFileDialog>
 
@@ -17,6 +18,7 @@ public:
     ~MainWindow();
 
 private slots:
+    void receiveSelectedRegion(const QImage &img);
     void on_actionLoad_Image_triggered();
 
     void on_actionExit_triggered();

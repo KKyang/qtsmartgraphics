@@ -6,6 +6,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    connect(ui->graphicsView, SIGNAL(sendSelectedRegion(QImage)),this,SLOT(receiveSelectedRegion(QImage)));
 }
 
 MainWindow::~MainWindow()
@@ -44,4 +45,10 @@ void MainWindow::on_actionLoad_Image_triggered()
 void MainWindow::on_actionExit_triggered()
 {
     this->close();
+}
+
+void MainWindow::receiveSelectedRegion(const QImage &img)
+{
+    ui->copy_screen->initialize(1, img.width(), img.height());
+    ui->copy_screen->setImagefromQImage(img);
 }

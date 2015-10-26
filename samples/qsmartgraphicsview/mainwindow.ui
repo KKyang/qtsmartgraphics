@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>420</width>
-    <height>394</height>
+    <width>628</width>
+    <height>374</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,8 +19,18 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>400</width>
-      <height>321</height>
+      <width>300</width>
+      <height>300</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QSmartGraphicsView" name="copy_screen">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>10</y>
+      <width>300</width>
+      <height>300</height>
      </rect>
     </property>
    </widget>
@@ -30,7 +40,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>420</width>
+     <width>628</width>
      <height>21</height>
     </rect>
    </property>
