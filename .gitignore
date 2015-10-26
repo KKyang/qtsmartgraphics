@@ -1,6 +1,7 @@
 html/
 debug/
 release/
+build-*/
 # C++ objects and libs
 
 *.slo
