@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['p',['p',['../jquery_8js.html#a2335e57f79b6acfb6de59c235dc8a83e',1,'jquery.js']]],
-  ['pathname',['pathName',['../navtree_8js.html#a364b3f4132309fa9aae78585cf2cb772',1,'navtree.js']]]
+  ['_7eqsidebuttonbar',['~QSideButtonBar',['../class_q_side_button_bar.html#a12dc09f1fd98a1e12a750689652a9b8a',1,'QSideButtonBar']]],
+  ['_7eqsmartgraphicsview',['~QSmartGraphicsView',['../class_q_smart_graphics_view.html#a3e38f9786ac8bcf1f582d42b3a7a9ca8',1,'QSmartGraphicsView']]]
 ];
