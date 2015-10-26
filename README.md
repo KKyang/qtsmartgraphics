@@ -43,3 +43,5 @@ Original by Shih-Jhong Yu, Revised by KKyang. If there is any bug found, feel fr
 ## License
 
 This library is written by Qt 5.3 and is distributed via source codes. Due to Qt open source licensing, this library is protected under LPGLv3 license.
+
+A Doxygen theme is used. Available at: https://github.com/nnen/doxygen-theme.
