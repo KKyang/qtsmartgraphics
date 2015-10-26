@@ -120,16 +120,11 @@ $(document).ready(function(){initNavTree('md_documentation__installation__guide.
 <li>Open main.cpp</li>
 <li><p class="startli">Add <code>#include &lt;QReadWriteLock&gt;</code> and <code>QReadWriteLock lock;</code></p>
 <p class="startli">It should look like this:</p>
+<p class="startli">``` #include "mainwindow.h"</p>
+<p class="startli">#include &lt;QApplication&gt;</p>
+<p class="startli">#include &lt;QReadWriteLock&gt;</p>
+<p class="startli">QReadWriteLock lock; ```</p>
 </li>
-</ol>
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;#include &quot;mainwindow.h&quot;</div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;</div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;#include &lt;QApplication&gt;</div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;</div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;#include &lt;QReadWriteLock&gt;</div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;</div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;QReadWriteLock lock;</div>
-</div><!-- fragment --><ol type="1">
 <li>If your Qt version is older than 5.5, use the OpenGL compiler. For Qt 5.5 or later, add <code>QT += opengl</code> in your .pro file.</li>
 <li>If want to use with OpenCV, simply add <code>DEFINE += HAVE_OPENCV</code> to .pro file.</li>
 </ol>
