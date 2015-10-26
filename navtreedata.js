@@ -2,6 +2,7 @@ var NAVTREE =
 [
   [ "qtsmartgraphics", "index.html", [
     [ "Installation Guide", "md_documentation__installation__guide.html", null ],
+    [ "Usage", "md_documentation__usage.html", null ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],

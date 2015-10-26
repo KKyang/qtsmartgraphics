@@ -119,17 +119,18 @@ $(document).ready(function(){initNavTree('md_documentation__installation__guide.
 <li>Click the added class then press promote.</li>
 <li>Open main.cpp</li>
 <li><p class="startli">Add <code>#include &lt;QReadWriteLock&gt;</code> and <code>QReadWriteLock lock;</code></p>
-<p class="startli">It should look like this:</p>
-<p class="startli">``` #include "mainwindow.h"</p>
-<p class="startli">#include &lt;QApplication&gt;</p>
-<p class="startli">#include &lt;QReadWriteLock&gt;</p>
-<p class="startli">QReadWriteLock lock; ```</p>
-</li>
+<p class="startli">It should look like this: </p><pre class="fragment">#include "mainwindow.h"
+
+#include &lt;QApplication&gt;
+
+#include &lt;QReadWriteLock&gt;
+
+QReadWriteLock lock;
+</pre></li>
 <li>If your Qt version is older than 5.5, use the OpenGL compiler. For Qt 5.5 or later, add <code>QT += opengl</code> in your .pro file.</li>
-<li>If want to use with OpenCV, simply add <code>DEFINE += HAVE_OPENCV</code> to .pro file.</li>
-</ol>
-<p>(Currently only qSmartGraphicsView needs to add this line.)</p>
-<ol type="1">
+<li><p class="startli">If want to use with OpenCV, simply add <code>DEFINE += HAVE_OPENCV</code> to .pro file.</p>
+<p class="startli">(Currently only qSmartGraphicsView needs to add this line.)</p>
+</li>
 <li>Done. </li>
 </ol>
 </div></div><!-- contents -->
