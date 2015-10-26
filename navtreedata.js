@@ -1,6 +1,7 @@
 var NAVTREE =
 [
   [ "qtsmartgraphics", "index.html", [
+    [ "Installation Guide", "md_documentation__installation__guide.html", null ],
     [ "Files", null, [
       [ "File List", "files.html", "files" ],
       [ "File Members", "globals.html", [
@@ -14,7 +15,7 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"annotated__dup_8js.html"
+"annotated____dup__8js_8js.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

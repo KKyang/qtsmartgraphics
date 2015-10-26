@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['jquery_2ejs',['jquery.js',['../jquery_8js.html',1,'']]]
+  ['installation_20guide_2emd',['Installation Guide.md',['../_installation_01_guide_8md.html',1,'']]]
 ];

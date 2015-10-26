@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['structbtn_5fi_5fd_2ejs',['structbtn_i_d.js',['../structbtn__i__d_8js.html',1,'']]]
+  ['resize_2ejs',['resize.js',['../resize_8js.html',1,'']]],
+  ['resize_5f8js_2ejs',['resize_8js.js',['../resize__8js_8js.html',1,'']]]
 ];
