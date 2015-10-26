@@ -322,6 +322,9 @@ void QSmartGraphicsView::mouseReleaseEvent(QMouseEvent *event)
     else if(event->button() == Qt::LeftButton && this->dragMode() == QGraphicsView::RubberBandDrag)
     {
         is_item = false;
+        if(event->pos() == select_start)
+            rubberBand->hide();
+
         this->setDragMode(QGraphicsView::NoDrag);
     }
 #endif
