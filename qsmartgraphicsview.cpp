@@ -335,7 +335,7 @@ void QSmartGraphicsView::keyPressEvent(QKeyEvent *event)
 {
     if(event->key() == Qt::Key_H)
     {
-        fadeOut();
+        hideSideBar->trigger();
     }
 }
 #endif
