@@ -81,20 +81,31 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p>A simple library that improves the user experience when displaying images by Qt's QLabel and QGraphicsView.</p>
-<h3>Introduction</h3>
+<h2>Introduction</h2>
 <p>A simple library that improves the user experience when displaying images by Qt's QLabel and QGraphicsView. It also supports OpenCV Mat array type.</p>
-<p>smartGraphicsView supports show image functions which supports QImage and Mat (in BGR format). It also supports mouse clicks, moves, and wheel events.</p>
+<p>smartGraphicsView supports show image functions which supports QImage and Mat (in BGR format). It also supports mouse clicks, moves, wheel events, and region selection.</p>
 <p>smartLabel supports show image functions which supports QImage and Mat (in BGR format). It also supports mouse clicks events.</p>
-<h3>Usage</h3>
-<p>qtsmartgraphics now uses OpenGL. Before Qt 5.5 you have to use OpenGL version. After Qt 5.5 you'll have to add opengl module in the *.pro file. (QT += opengl)</p>
-<h3>Author</h3>
+<h2>Usage</h2>
+<p>Functions below can be turned on or off individually.</p>
+<h3>OpenCV</h3>
+<p>If you wish to use OpenCV, add DEFINE += HAVE_OPENCV in your *.pro file.</p>
+<h3>OpenGL</h3>
+<p>If you wish to use OpenGL, you'll have to use OpenGL version (&lt; QT 5.5) or add opengl module in the *.pro file (&gt;= QT5.5). (QT += opengl)</p>
+<h3><a class="el" href="class_q_side_button_bar.html">QSideButtonBar</a></h3>
+<p>If you wish to turn off the SideButtonBar, add DEFINES += NO_SIDEMENU in your *.pro file.</p>
+<h3>QtSVG</h3>
+<p>If you wish to use icon for your QtSmartGraphicsView, add svg module in the *.pro file. (QT += svg)</p>
+<p>~~qtsmartgraphics now uses OpenGL. Before Qt 5.5 you have to use OpenGL version. After Qt 5.5 you'll have to add opengl module in the *.pro file. (QT += opengl)~~</p>
+<h2>Documentation</h2>
+<p>Available at: <a href="http://kkyang.github.io/qtsmartgraphics">http://kkyang.github.io/qtsmartgraphics</a></p>
+<h2>Author</h2>
 <p>Original by Shih-Jhong Yu, Revised by KKyang. If there is any bug found, feel free to open an issue at Github.</p>
-<h3>License</h3>
+<h2>License</h2>
 <p>This library is written by Qt 5.3 and is distributed via source codes. Due to Qt open source licensing, this library is protected under LPGLv3 license. </p>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Sep 17 2015 00:17:54 for qtsmartgraphics by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Oct 26 2015 10:15:15 for qtsmartgraphics by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.8
 </small></address>
