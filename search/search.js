@@ -7,18 +7,10 @@
 
 var indexSectionsWithContent =
 {
-  0: "bgiqs",
-  1: "bq",
-  2: "gis",
-  3: "q"
 };
 
 var indexSectionNames =
 {
-  0: "all",
-  1: "classes",
-  2: "functions",
-  3: "pages"
 };
 
 function convertToId(search)
