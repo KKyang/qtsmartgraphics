@@ -1,4 +1,4 @@
-# qtsmartgraphics
+# [qtsmartgraphics](https://github.com/KKyang/qtsmartgraphics)
 
 A simple library that improves the user experience when displaying images by Qt's QLabel and QGraphicsView.
 
