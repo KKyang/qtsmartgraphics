@@ -105,6 +105,7 @@ $(document).ready(function(){initNavTree('md_documentation__usage.html','');});
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p>The tutorial shows how to use the widget.</p>
+<h3>Interface</h3>
 <p>This is the sample of the <a class="el" href="class_q_smart_graphics_view.html">QSmartGraphicsView</a>. The left view receives the image loaded from the system, and the right view receives the selected sub-image of the left view.</p>
 <div class="image">
 <img src="http://i.imgur.com/C7gQ4Vs.png"  alt="Imgur"/>
@@ -129,7 +130,46 @@ $(document).ready(function(){initNavTree('md_documentation__usage.html','');});
 <div class="image">
 <img src="http://i.imgur.com/DyDLhkf.png"  alt="Imgur"/>
 </div>
- </div></div><!-- contents -->
+<h3>Code</h3>
+<p>The following code reads the image from the system and puts into the <code>qsmartgraphicsview</code></p>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;QStringList fileNames = QFileDialog::getOpenFileNames(this,tr(&quot;Open File&quot;),0,&quot;Image files (*.png *.bmp *.jpg);;PNG (*.png);;BMP (*.bmp);;JPG (*.jpg)&quot;);</div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;</div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;if(fileNames.isEmpty())</div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;    return;</div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;</div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;int img_w = 0, img_h = 0;</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;std::vector&lt;QImage&gt; images;</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;for(int i = 0; i &lt; fileNames.size(); i++)</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;{</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;    QImage tmp(fileNames.at(i));</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    if(!tmp.isNull())</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    {</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        if(tmp.width() &gt; img_w){img_w = tmp.width();}</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        if(tmp.height() &gt; img_h){img_h = tmp.height();}</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        images.push_back(tmp);</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    }</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;}</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;if(!images.empty())</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;{</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    ui-&gt;graphicsView-&gt;initialize(images.size(), img_w, img_h);  //initial qgraphics view</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    ui-&gt;graphicsView-&gt;setImagefromQImage(images);</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;}</div>
+</div><!-- fragment --><p><code>qsmartgraphicsview</code> must be initialize before use.</p>
+<p>The "Copy Selected Region" function triggers a signal <code>sendSelectedRegion(QImage)</code> when clicked. You can connect it to a slot to receive the image.</p>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;MainWindow::MainWindow(QWidget *parent) :</div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;    QMainWindow(parent),</div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;    ui(new Ui::MainWindow)</div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;{</div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;    ui-&gt;setupUi(this);</div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;    connect(ui-&gt;graphicsView, SIGNAL(sendSelectedRegion(QImage)),this,SLOT(receiveSelectedRegion(QImage)));</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;}</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;void MainWindow::receiveSelectedRegion(const QImage &amp;img)</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;{</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    //Do something</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;}</div>
+</div><!-- fragment --> </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
