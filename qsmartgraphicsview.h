@@ -41,6 +41,11 @@
 class QSideButtonBar;
 class customQGraphicsItem;
 #endif
+#ifdef ISCREATEDASLIBRARY
+   #define DLLSTATE Q_DECL_IMPORT
+#else
+   #define DLLSTATE  Q_DECL_EXPORT
+#endif
 
 /*! QSmartGraphicsView main class. Provides user a more advance image viewing widget.*/
 class QSmartGraphicsView : public QGraphicsView

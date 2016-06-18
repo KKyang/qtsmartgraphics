@@ -8,7 +8,13 @@
 #include <QTime>
 #include <QDebug>
 #include <QReadWriteLock>
+#include <QtCore/QtGlobal>
+#ifdef ISCREATEDASLIBRARY
+#include "../../simpleProcessNewGUI/main.cpp"
+extern DLLSTATE QReadWriteLock lock;
+#else
 extern QReadWriteLock lock;
+#endif
 
 QSmartGraphicsView::QSmartGraphicsView(QWidget *parent) :
     QGraphicsView(parent)
@@ -30,7 +36,7 @@ QSmartGraphicsView::QSmartGraphicsView(QWidget *parent) :
     connect(copySelectedRegion, SIGNAL(triggered()), this, SLOT(on_copySelectedRegionAction_triggered()));
 #endif
     img_num = 0;
-    scene = new QGraphicsScene;
+    scene = new QGraphicsScene(this);
 
 #ifndef NO_SIDEMENU
     //New side button bar. Not finished.
@@ -68,8 +74,11 @@ QSmartGraphicsView::QSmartGraphicsView(QWidget *parent) :
     scene->addWidget(sbtn);
 #endif
     this->setScene(scene);
+
 #ifdef QT_OPENGL_LIB
     this->setViewport(new QGLWidget(QGLFormat(QGL::SampleBuffers | QGL::DirectRendering)));
+#else
+    this->setAttribute(Qt::WA_MSWindowsUseDirect3D, true);
 #endif
     this->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
 }
